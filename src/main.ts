@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+import { select, csv, scaleLinear, axisBottom, axisLeft, bisector, line, pointer } from 'd3';
 
 import './style.css';
 
@@ -16,8 +16,7 @@ import './style.css';
     height = 400 - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
-  var svg = d3
-    .select(chartRootDiv)
+  var svg = select(chartRootDiv)
     .append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
@@ -25,21 +24,21 @@ import './style.css';
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   //Read the data
-  const data = await d3.csv<'x' | 'y'>('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_IC.csv');
+  const data = await csv<'x' | 'y'>('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_IC.csv');
 
   // Add X axis --> it is a date format
-  var x = d3.scaleLinear().domain([1, 100]).range([0, width]);
+  var x = scaleLinear().domain([1, 100]).range([0, width]);
   svg
     .append('g')
     .attr('transform', 'translate(0,' + height + ')')
-    .call(d3.axisBottom(x));
+    .call(axisBottom(x));
 
   // Add Y axis
-  var y = d3.scaleLinear().domain([0, 13]).range([height, 0]);
-  svg.append('g').call(d3.axisLeft(y));
+  var y = scaleLinear().domain([0, 13]).range([height, 0]);
+  svg.append('g').call(axisLeft(y));
 
   // This allows to find the closest X index of the mouse:
-  var bisect = d3.bisector<{ x: number }, number>(function (d) {
+  var bisect = bisector<{ x: number }, number>(function (d) {
     return d.x;
   }).left;
 
@@ -58,7 +57,7 @@ import './style.css';
     .attr('stroke-width', 1.5)
     .attr(
       'd',
-      d3.line(
+      line(
         (d) => x(+(d.x || 0)),
         (d) => y(+(d.y || 0))
       )
@@ -83,7 +82,7 @@ import './style.css';
 
   function mousemove(event: any) {
     // recover coordinate we need
-    var x0 = x.invert(d3.pointer(event)[0]);
+    var x0 = x.invert(pointer(event)[0]);
     var i = bisect(data as any, x0, 1);
     const selectedData = data[i];
 
