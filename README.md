@@ -4,9 +4,9 @@ This project is a study of d3.js lib and how to implement a tooltip.
 
 #### Stack
 
-- (D3.js)[https://d3js.org/]
-- (Vite)[https://vitejs.dev/]
-- (TypeScript)[https://www.typescriptlang.org/]
+- [D3.js](https://d3js.org/)
+- [Vite](https://vitejs.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
 
 #### Preview
 
